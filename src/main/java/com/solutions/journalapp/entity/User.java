@@ -1,7 +1,9 @@
 package com.solutions.journalapp.entity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -24,5 +26,6 @@ public class User{
     @NonNull
     private String password;
     @DBRef
-    private List<JournalEntry> journalEntries = new ArrayList<>();
+    private Set<JournalEntry> journalEntries = new HashSet<>();
+    private List<String> roles = new ArrayList<>();
 }
