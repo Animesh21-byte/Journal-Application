@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.solutions.journalapp.entity.JournalEntry;
 import com.solutions.journalapp.entity.User;
 import com.solutions.journalapp.repository.JournalEntryRepository;
@@ -17,6 +19,7 @@ public class JournalEntryService {
     @Autowired
     private UserService userService;
 
+    @Transactional
     public void saveEntity(JournalEntry journalEntry,String userName){
         JournalEntry saved = journalEntryRepository.save(journalEntry);
         User user = userService.findByUserName(userName);
@@ -33,13 +36,18 @@ public class JournalEntryService {
     public Optional<JournalEntry> getById(ObjectId id){
         return journalEntryRepository.findById(id);
     }
-    public void deleteById(ObjectId id,String userName){
+    public boolean deleteById(ObjectId id,String userName){
         User user = userService.findByUserName(userName);
-        for(JournalEntry journalEntry : user.getJournalEntries()){
-            if(journalEntry.getId().equals(id)) user.getJournalEntries().remove(journalEntry);
+        if(user == null){
+            return false;
+        }
+        boolean removed = user.getJournalEntries().removeIf(journalEntry -> journalEntry.getId().equals(id));
+        if(!removed){
+            return false;
         }
         userService.save(user);
         journalEntryRepository.deleteById(id);
+        return true;
     }
     public void deleteAll(){
         journalEntryRepository.deleteAll();

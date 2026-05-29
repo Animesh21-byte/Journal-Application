@@ -71,7 +71,7 @@ public class JournalEntryController {
         return journalEntryService.getById(id).orElse(null);
     }
 
-    @PostMapping("{userName}")
+    @PostMapping("/{userName}")
     public ResponseEntity<JournalEntry> createEntry(@PathVariable String userName,@RequestBody JournalEntry param){
         try{
             param.setDate(LocalDateTime.now());
@@ -104,11 +104,17 @@ public class JournalEntryController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @DeleteMapping("/id/{userName}/{id}")
-    public ResponseEntity<?> deleteEntity(@PathVariable ObjectId id,@PathVariable String userName){
+    @DeleteMapping("/{userName}/{id}")
+    public ResponseEntity<?> deleteEntity(@PathVariable String id,@PathVariable String userName){
         try{
-            journalEntryService.deleteById(id,userName);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            if(!ObjectId.isValid(id)){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            boolean deleted = journalEntryService.deleteById(new ObjectId(id),userName);
+            if(deleted){
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             
         }catch(Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
