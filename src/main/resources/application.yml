@@ -1,15 +1,3 @@
 spring:
-    application:
-        name: journalapp
-    data:
-        mongodb:
-            uri: mongodb+srv://aranimesh926_db_user:UWqv27fox8g6xyg4@cluster0.kzmy0vq.mongodb.net/?appName=Cluster0
-            database: journaldb
-            auto-index-creation: true
-    security:
-        user:
-            name: admin
-            password: admin123
-            roles: USER
-server:
-  port: 5050
+    profiles:
+        active: dev
