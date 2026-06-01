@@ -6,12 +6,13 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.solutions.journalapp.entity.JournalEntry;
 import com.solutions.journalapp.entity.User;
 import com.solutions.journalapp.repository.JournalEntryRepository;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j //Using this annotaion we can use slf4j for logging withour its instance
 public class JournalEntryService {
     @Autowired
     private JournalEntryRepository journalEntryRepository;
@@ -39,6 +40,7 @@ public class JournalEntryService {
     public boolean deleteById(ObjectId id,String userName){
         User user = userService.findByUserName(userName);
         if(user == null){
+            log.error("User with id {} not found",id);
             return false;
         }
         boolean removed = user.getJournalEntries().removeIf(journalEntry -> journalEntry.getId().equals(id));
