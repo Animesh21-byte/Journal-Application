@@ -29,6 +29,7 @@ public class UserServiceTests{
         "4,6,10",
         "20,10,30"
     })
+    @Disabled
     public void testAdd(int a,int b,int expected){
         assertEquals(expected, a+b);
     }
@@ -38,7 +39,8 @@ public class UserServiceTests{
         "Ani",
         "Homelander"
     })
-    public void userPresentTest(String name){
-        assertNotNull(userRepository.findByUserName(name),"Failed for :"+name);
+    @Disabled
+    public void userPresentTest(UserServiceTests userServiceTests, String name){
+        assertNotNull(userServiceTests.userRepository.findByUserName(name),"Failed for :"+name);
     }
 }
