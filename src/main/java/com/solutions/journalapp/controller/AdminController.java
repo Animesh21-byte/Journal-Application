@@ -1,5 +1,7 @@
 package com.solutions.journalapp.controller;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.solutions.journalapp.cache.AppCache;
 import com.solutions.journalapp.entity.User;
 import com.solutions.journalapp.service.UserService;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,9 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AppCache appCache;
 
     @GetMapping("/all-users")
     public ResponseEntity<List<User>> getAllUsers(){
@@ -63,4 +68,9 @@ public class AdminController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }    
+
+    @GetMapping("/clear-cache")
+    public void clearCache(){
+        appCache.init();
+    }
 }

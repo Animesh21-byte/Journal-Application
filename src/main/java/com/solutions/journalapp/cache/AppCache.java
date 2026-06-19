@@ -15,13 +15,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AppCache {
-    private Map<String, String> appCache = new HashMap<>();
+    private Map<String, String> appCache;
 
     @Autowired
     ConfigJournalAppRepository configJournalAppRepository;
 
     @PostConstruct//use to auto call a method while a bean is created
     public void init(){
+            appCache = new HashMap<>();
             List<ConfigJournalAppEntity> all = configJournalAppRepository.findAll();
             for(ConfigJournalAppEntity configJournalAppEntity : all){
                 appCache.put(configJournalAppEntity.getKey(),configJournalAppEntity.getValue());
