@@ -87,5 +87,10 @@ public class AdminController {
     public List<User> getMethodName(@PathVariable String userName) {
         return mongoRepositoryImpl.findByUserName(userName);
     }
+
+    @GetMapping("/findUsersWithSA")
+    public List<User> getUsersWithSA(){
+        return mongoRepositoryImpl.findUserForSA();
+    }
     
 }

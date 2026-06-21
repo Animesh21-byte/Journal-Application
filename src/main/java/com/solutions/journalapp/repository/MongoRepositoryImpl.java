@@ -19,4 +19,14 @@ public class MongoRepositoryImpl {
         query.addCriteria(Criteria.where("userName").is(userName));
         return mongoTemplate.find(query,User.class);
     }
+
+    public List<User> findUserForSA(){
+        Query query = new Query();
+        /* query.addCriteria(Criteria.where("email").exists(true));
+        query.addCriteria(Criteria.where("email").ne(null).ne("")); */
+        query.addCriteria(Criteria.where("sentimentAnalysis").is(true));
+        query.addCriteria(Criteria.where("email").regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"));//to check wether the email matches regular expression
+        query.addCriteria(Criteria.where("roles").in("USER"));
+        return mongoTemplate.find(query,User.class);
+    }
 }
