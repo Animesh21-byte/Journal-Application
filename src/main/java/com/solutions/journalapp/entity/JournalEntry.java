@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.mongodb.lang.NonNull;
+import com.solutions.journalapp.enums.Sentiment;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,4 +22,5 @@ public class JournalEntry {
     private String title;
     private String content;
     private LocalDateTime date;
+    private Sentiment sentiment;
 }
