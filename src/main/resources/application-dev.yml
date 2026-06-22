@@ -13,5 +13,16 @@ spring:
             name: admin
             password: admin123
             roles: USER
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: ${email-id}
+        password: ${gmail-password}
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
 server:
   port: 5050
