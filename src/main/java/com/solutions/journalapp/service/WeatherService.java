@@ -17,12 +17,23 @@ public class WeatherService {
 
     @Autowired
     RestTemplate restTemplate;
+
     @Autowired
     AppCache appCache;
 
+    @Autowired
+    RedisService redisService;
+
     public String getTemperature(String location) {
-        String finalApi = String.format(appCache.getAppCache().get("WEATHER_STACK_API"),key,location);
-        ResponseEntity<Weather> response = restTemplate.exchange(finalApi, HttpMethod.GET, null, Weather.class);
-        return String.valueOf(response.getBody().getCurrent().getTemperature());
+        Weather weather = redisService.get(location,Weather.class);
+        if(weather != null){
+            return String.valueOf(weather.getCurrent().getTemperature());
+        }else{
+            String finalApi = String.format(appCache.getAppCache().get("WEATHER_STACK_API"),key,location);
+            ResponseEntity<Weather> response = restTemplate.exchange(finalApi, HttpMethod.GET, null, Weather.class);
+            redisService.set(location,response.getBody(),5);
+            return String.valueOf(response.getBody().getCurrent().getTemperature());
+
+        }
     }
 }
